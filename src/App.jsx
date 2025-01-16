@@ -1,10 +1,16 @@
-import { RecoilRoot, useRecoilValue } from "recoil";
+import {
+  RecoilRoot,
+  useRecoilState,
+  useRecoilValue,
+  useSetRecoilState,
+} from "recoil";
 import "./App.css";
 import {
   josbsAtom,
   messagingAtom,
   networkAtom,
   notificationsAtom,
+  totalNotificationsSelector,
 } from "./atoms";
 
 function App() {
@@ -18,9 +24,9 @@ function App() {
 function MainApp() {
   const networkNotificationCount = useRecoilValue(networkAtom);
   const jobsCount = useRecoilValue(josbsAtom);
-  const messageCount = useRecoilValue(messagingAtom);
+  const [messageCount] = useRecoilState(messagingAtom);
   const notificationCount = useRecoilValue(notificationsAtom);
-
+  const totalCount = useRecoilValue(totalNotificationsSelector);
   return (
     <>
       <button>Home ()</button>
@@ -33,8 +39,7 @@ function MainApp() {
       <button>
         Notifications ({notificationCount > 100 ? "99+" : notificationCount})
       </button>
-
-      <button>Me</button>
+      <button>Me ({totalCount})</button>
     </>
   );
 }
