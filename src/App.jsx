@@ -1,17 +1,8 @@
-import {
-  RecoilRoot,
-  useRecoilState,
-  useRecoilValue,
-  useSetRecoilState,
-} from "recoil";
-import "./App.css";
-import {
-  josbsAtom,
-  messagingAtom,
-  networkAtom,
-  notificationsAtom,
-  totalNotificationsSelector,
-} from "./atoms";
+import { RecoilRoot, useRecoilState, useRecoilValue } from "recoil";
+
+import { notifications, totalNotificationsSelector } from "./atoms";
+import { useEffect } from "react";
+import axios from "axios";
 
 function App() {
   return (
@@ -22,24 +13,19 @@ function App() {
 }
 
 function MainApp() {
-  const networkNotificationCount = useRecoilValue(networkAtom);
-  const jobsCount = useRecoilValue(josbsAtom);
-  const [messageCount] = useRecoilState(messagingAtom);
-  const notificationCount = useRecoilValue(notificationsAtom);
-  const totalCount = useRecoilValue(totalNotificationsSelector);
+  const [networkCount, setNetworkCount] = useRecoilState(notifications);
+  const totalNotificationsCount = useRecoilValue(totalNotificationsSelector);
+
   return (
     <>
       <button>Home ()</button>
       <button>
-        My network (
-        {networkNotificationCount > 100 ? "99+" : networkNotificationCount})
+        My network ({networkCount.network > 100 ? "99+" : networkCount.network})
       </button>
-      <button>Jobs ({jobsCount > 100 ? "99+" : jobsCount})</button>
-      <button>Messaging ({messageCount > 100 ? "99+" : messageCount})</button>
-      <button>
-        Notifications ({notificationCount > 100 ? "99+" : notificationCount})
-      </button>
-      <button>Me ({totalCount})</button>
+      <button>Jobs ({networkCount.jobs})</button>
+      <button>Messaging ({networkCount.messaging})</button>
+      <button>Notifications ({networkCount.notifications})</button>
+      <button>Me ({totalNotificationsCount})</button>
     </>
   );
 }
